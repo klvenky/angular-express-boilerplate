@@ -11,9 +11,14 @@ async function main() {
   console.log("started exec main");
   const app = express()
     .use("/api", apiRoutes())
-    .use("/ui", homePage)
     .use('/dist', express.static(distPath))
-    .use('/index.html', express.static("client/index.html"));
+    .use("/", homePage)
+    .use((req,res) =>{
+      res.status(404).send(`
+        <h3>Route not found!!</h3>
+        <p>${req.originalUrl}</p>
+      `)
+    })
 
   app.listen(port, function () {
     console.log(`listening on http://localhost:${port}`);
